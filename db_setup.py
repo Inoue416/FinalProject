@@ -19,27 +19,27 @@ def make_db():
     cur.close()
     conn.close()
 
-def make_table():
-    # connecting databse
-    conn = psycopg2.connect(
-        dbname=setup_env.usedbname,
-        user=setup_env.user,
-        password=setup_env.password,
-        port=setup_env.port
-    )
+# def make_table():
+#     # connecting databse
+#     conn = psycopg2.connect(
+#         dbname=setup_env.usedbname,
+#         user=setup_env.user,
+#         password=setup_env.password,
+#         port=setup_env.port
+#     )
 
-    # getting cursor
-    cur = conn.cursor()
-    # making tables
-    cur.execute(setup_env.createUsersSQL)
-    cur.execute(setup_env.createThingsSQL)
-    cur.execute(setup_env.createPointsSQL)
-    conn.commit()
-    cur.close()
-    conn.close()
+#     # getting cursor
+#     cur = conn.cursor()
+#     # making tables
+#     cur.execute(setup_env.createUsersSQL)
+#     cur.execute(setup_env.createThingsSQL)
+#     cur.execute(setup_env.createPointsSQL)
+#     conn.commit()
+#     cur.close()
+#     conn.close()
 
 if __name__ == "__main__":
     print("Setup database ...")
     make_db()
-    make_table()
+    # make_table()
     print("fin.")
