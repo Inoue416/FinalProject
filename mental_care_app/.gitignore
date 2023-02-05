@@ -1,2 +1,4 @@
 .env
 backend/sample.py
+backend/__pycache__
+models/__pycache__
