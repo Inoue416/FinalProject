@@ -1,5 +1,9 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import { createRouter, createWebHistory } from 'vue-router';
+import HomeView from '../views/HomeView.vue';
+import LoginView from '../views/LoginView.vue';
+import SignupView from '../views/SignupView.vue';
+import FormView from '../views/FormView.vue';
+import ListView from '../views/ListView.vue';
 
 const routes = [
   {
@@ -10,22 +14,22 @@ const routes = [
   {
     path: '/login',
     name: 'login',
-    component: () => import('../views/LoginView.vue')
+    component: LoginView
   },
   {
     path: '/signup',
     name: 'signup',
-    component: () => import('../views/SignupView.vue')
+    component: SignupView
   },
   {
     path: '/form',
     name: 'form',
-    component: () => import('../views/FormView.vue')
+    component: FormView
   },
   {
     path: '/list',
     name: 'list',
-    component: () => import('../views/ListView.vue')
+    component: ListView
   }
 ]
 
