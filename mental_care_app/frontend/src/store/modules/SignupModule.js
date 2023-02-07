@@ -1,5 +1,7 @@
 import axios from 'axios';
 import * as validators from '../../validators/SignupValidator.js';
+import router from '@/router/index.js';
+
 const state = {
     username: {
         value: "",
@@ -54,6 +56,9 @@ const actions = {
                     password_confirm: context.state.password_confirm.value
                 });
             const res = api_res.data.message;
+            if (res == "OK"){
+                router.push("/");
+            }
             console.log(res);
         }catch(error) {
             console.log(error);
