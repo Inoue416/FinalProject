@@ -11,8 +11,7 @@
     let get_query = null;
     let set_query = null;
     let label = "";
-    console.log("kind key: ");
-    console.log(props);
+    
     if (props.kindKey == 'password'){
         console.log("phase: password");
         get_query = "signupmodule/getPassword";
@@ -33,12 +32,16 @@
     const getMessage = computed(() => {
         return store.getters[get_query].message;
     });
+    const isActive = computed(() => {
+        if (props.kindKey == 'password') { return false; }
+        return store.getters[get_query].isActive;
+    })
 </script>
 
 <template>
     <div class="mb-3">
         <label :for="set_query" class="form-label">パスワード {{ label }}</label>
-        <input type="password" :id="set_query" class="form-control" v-model="getPassword" />
+        <input type="password" :id="set_query" class="form-control" v-model="getPassword" :disabled="isActive" />
         <p>入力: {{ getMessage }}</p>
     </div>
 </template>

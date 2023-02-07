@@ -19,6 +19,7 @@ const state = {
     password_confirm: {
         value: "",
         message: "",
+        isActive: true,
         is_ok: false
     },
     button: false
@@ -102,12 +103,15 @@ const mutations = {
             if (res === null) {
                 state.password.is_ok = false;
                 state.password.message = '必須項目です';
+                state.password_confirm.isActive = true;
             }else if (res) {
                 state.password.is_ok = true;
                 state.password.message = 'OK';
+                state.password_confirm.isActive = false;
             }else {
                 state.password.is_ok = false;
                 state.password.message = '入力にエラーがあります';
+                state.password_confirm.isActive = true;
             }
         }
         else if (input.key == 'password_confirm') {
@@ -128,8 +132,10 @@ const mutations = {
         }
         state[input.key].value = input.value;
         let count = 0;
-        for (const s in state) {
-            if (s.is_ok){ continue; }
+        for (const idx in state) {
+            console.log(state[idx]);
+            if (idx == "button"){ continue; }
+            if (state[idx].is_ok){ continue; }
             count+=1;
             break;
         }
