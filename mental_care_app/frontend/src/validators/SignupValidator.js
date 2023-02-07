@@ -1,5 +1,5 @@
 export function userNameValidator(value) {
-    const regexp = /[<>`/~|*!=$&^%()?.,;:’”＜＞'"[{\]}\s\\]+/gi;
+    const regexp = /[<>`/~|*!=$&^+%()?.,;:’”＜＞'"[{\]}\s\\]+/gi;
     if (!(3 <= value.length && value.length <= 10)){
         return "3 ~ 10文字の範囲で入力してください"
     }
