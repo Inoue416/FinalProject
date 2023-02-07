@@ -20,12 +20,16 @@
         }
     })
     const get_query = props.moduleName+"/getButton";
+    const set_query = props.moduleName+'/sendApi'
     const store = useStore();
     const isActive = computed(() => {
         return store.getters[get_query];
     });
+    const setApi = () => {
+        store.dispatch(set_query);
+    };
 </script>
 <!-- TODO: Clickイベントをいれる -->
 <template>
-    <button :type="props.buttonType" :class="props.buttonStyle" :disabled="!isActive">{{ props.buttonLabel }}</button>
+    <button :type="props.buttonType" :class="props.buttonStyle" :disabled="!isActive" @click="setApi">{{ props.buttonLabel }}</button>
 </template>

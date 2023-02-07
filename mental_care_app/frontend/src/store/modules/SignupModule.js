@@ -1,4 +1,4 @@
-//import axios from 'axios';
+import axios from 'axios';
 import * as validators from '../../validators/SignupValidator.js';
 const state = {
     username: {
@@ -44,21 +44,21 @@ const getters = {
 }
 
 const actions = {
-    // async registor(context) {
-    //     try{
-    //         const api_res = await axios.post(
-    //             "http://127.0.0.1:5000/api/registor", {
-    //                 username: context.state.username,
-    //                 email: context.state.email,
-    //                 password: context.state.password,
-    //                 password_confirm: context.state.password_confirm
-    //             });
-    //         const res = api_res.response;
-    //         console.log(res);
-    //     }catch(error) {
-    //         console.log(error);
-    //     }
-    // },
+    async sendApi(context) {
+        try{
+            const api_res = await axios.post(
+                "http://127.0.0.1:5000/api/registor", {
+                    username: context.state.username.value,
+                    email: context.state.email.value,
+                    password: context.state.password.value,
+                    password_confirm: context.state.password_confirm.value
+                });
+            const res = api_res.data.message;
+            console.log(res);
+        }catch(error) {
+            console.log(error);
+        }
+    },
     inputForm(context, input) {
         context.commit("setForm", input);
     }

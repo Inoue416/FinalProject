@@ -1,4 +1,4 @@
-//import axios from 'axios';
+import axios from 'axios';
 import * as validators from '../../validators/SignupValidator.js';
 const state = {
     email: {
@@ -27,6 +27,20 @@ const getters = {
 }
 
 const actions = {
+    async sendApi(context) {
+        try{
+            const api_res = await axios.post(
+                "http://127.0.0.1:5000/api/login", {
+                    email: context.state.email.value,
+                    password: context.state.password.value
+                });
+            console.log(api_res);
+            const res = api_res.data.message;
+            console.log(res);
+        }catch(error) {
+            console.log(error);
+        }
+    },
     inputForm(context, input) {
         context.commit("setForm", input);
     }
