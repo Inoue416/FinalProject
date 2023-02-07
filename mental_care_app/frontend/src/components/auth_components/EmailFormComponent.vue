@@ -1,17 +1,25 @@
 <script setup>
     import { useStore } from 'vuex';
-    import { computed } from 'vue';
+    import { computed, defineProps } from 'vue';
+    const props = defineProps({
+        moduleName: {
+            type: String,
+            required: true
+        }
+    });
     const store = useStore();
+    const get_query = props.moduleName+"/getEmail";
+    const set_query = props.moduleName+"/inputForm";
     const getEmail = computed({
         get() {
-            return store.getters["signupmodule/getEmail"].value;
+            return store.getters[get_query].value;
         },
         set(value) {
-            store.dispatch("signupmodule/inputForm", {value: value, key: "email"});
+            store.dispatch(set_query, {value: value, key: "email"});
         }
     });
     const getMessage = computed(() => {
-        return store.getters["signupmodule/getEmail"].message;
+        return store.getters[get_query].message;
     });
 </script>
 

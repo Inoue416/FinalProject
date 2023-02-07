@@ -13,15 +13,19 @@
         buttonStyle: {
             type: String,
             required: true
+        },
+        moduleName: {
+            type:String,
+            required: true
         }
     })
+    const get_query = props.moduleName+"/getButton";
     const store = useStore();
     const isActive = computed(() => {
-        console.log(store.getters["signupmodule/getButton"]);
-        return store.getters["signupmodule/getButton"];
+        return store.getters[get_query];
     });
 </script>
-
+<!-- TODO: Clickイベントをいれる -->
 <template>
     <button :type="props.buttonType" :class="props.buttonStyle" :disabled="!isActive">{{ props.buttonLabel }}</button>
 </template>

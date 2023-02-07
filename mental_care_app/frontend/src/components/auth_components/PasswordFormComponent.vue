@@ -5,6 +5,10 @@
         kindKey: {
             type: String,
             required: true
+        },
+        moduleName: {
+            type: String,
+            required: true
         }
     });
     const store = useStore();
@@ -14,10 +18,10 @@
     
     if (props.kindKey == 'password'){
         console.log("phase: password");
-        get_query = "signupmodule/getPassword";
+        get_query = props.moduleName+"/"+"getPassword";
         set_query = "password";
     }else {
-        get_query = "signupmodule/getPasswordConfirm";
+        get_query = props.moduleName+"/getPasswordConfirm";
         set_query = "password_confirm";
         label = "(再入力)";
     }
@@ -26,7 +30,7 @@
             return store.getters[get_query].value;
         },
         set(value) {
-            store.dispatch("signupmodule/inputForm", {value: value, key: set_query});
+            store.dispatch(props.moduleName+"/inputForm", {value: value, key: set_query});
         }
     });
     const getMessage = computed(() => {
