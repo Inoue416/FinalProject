@@ -111,23 +111,29 @@ const mutations = {
             }
         }
         else if (input.key == 'password_confirm') {
-            res = validators.passwordConfirmValidator(input.value);
-            if (res) {
-                state.is_ok = true;
-                state.message = "OK";
+            console.log("pass_confirm valid");
+            res = validators.passwordConfirmValidator(state.password.is_ok, state.password.value, input.value);
+            console.log(res);
+            if (res === null) {
+                state.password_confirm.is_ok = false;
+                state.password_confirm.message = "上のパスワード欄にエラーがあります";
+            }
+            else if (res) {
+                state.password_confirm.is_ok = true;
+                state.password_confirm.message = "OK";
             }else {
-                state.is_ok = false;
-                state.message = "パスワード入力が一致していません";
+                state.password_confirm.is_ok = false;
+                state.password_confirm.message = "パスワード入力が一致していません";
             }
         }
+        state[input.key].value = input.value;
         let count = 0;
-        for (s in state) {
+        for (const s in state) {
             if (s.is_ok){ continue; }
             count+=1;
             break;
         }
         if (count <= 0) { state.button = true; }
-        state[input.key].value = input.value;
     }
 };
 

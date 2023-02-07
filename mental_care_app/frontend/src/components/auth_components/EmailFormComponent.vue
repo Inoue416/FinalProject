@@ -4,18 +4,21 @@
     const store = useStore();
     const getEmail = computed({
         get() {
-            return store.getters["signupmodule/getEmail"];
+            return store.getters["signupmodule/getEmail"].value;
         },
         set(value) {
             store.dispatch("signupmodule/inputForm", {value: value, key: "email"});
         }
+    });
+    const getMessage = computed(() => {
+        return store.getters["signupmodule/getEmail"].message;
     });
 </script>
 
 <template>
     <div class="mb-3">
         <label for="email" class="form-label">メールアドレス</label>
-        <input type="email" class="form-control" id="email" placeholder="sample@example.com" v-model="getEmail" />
-        <p>入力: {{ getEmail }}</p>
+        <input type="email" class="form-control" id="email" v-model="getEmail" />
+        <p>入力: {{ getMessage }}</p>
     </div>
 </template>
