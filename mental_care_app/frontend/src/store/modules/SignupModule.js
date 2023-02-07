@@ -1,9 +1,26 @@
 //import axios from 'axios';
+import * as validators from '../../validators/SignupValidator.js';
 const state = {
-    username: "",
-    email: "",
-    password: "",
-    password_confirm: "",
+    username: {
+        value: "",
+        message: "",
+        is_ok: false
+    },
+    email: {
+        value: "",
+        message: "",
+        is_ok: false
+    },
+    password: {
+        value: "",
+        message: "",
+        is_ok: false
+    },
+    password_confirm: {
+        value: "",
+        message: "",
+        is_ok: false
+    },
     button: false
 };
 
@@ -56,7 +73,61 @@ const mutations = {
         }
     },
     setForm(state, input){
-        state[input.key] = input.value;
+        let res = "";
+        if (input.key == 'username') { // usernameのバリデーション
+            res = validators.userNameValidator(input.value);
+            if (res === null) { 
+                state.username.is_ok = true;
+                state.username.message = "OK"
+            }else {
+                state.username.is_ok = false;
+                state.username.message = res;
+            }
+        }
+        else if (input.key == 'email') {
+            res = validators.emailValidator(input.value);
+            if (res === null) {
+                state.email.is_ok = false;
+                state.email.message = '必須の項目です';
+            }else if (res) {
+                state.email.is_ok = true;
+                state.email.message = 'OK';
+            }else {
+                state.email.is_ok = false;
+                state.email.message = '入力にエラーがあります';
+            }
+        }
+        else if (input.key == 'password') {
+            res = validators.passwordValidator(input.value);
+            if (res === null) {
+                state.password.is_ok = false;
+                state.password.message = '必須項目です';
+            }else if (res) {
+                state.password.is_ok = true;
+                state.password.message = 'OK';
+            }else {
+                state.password.is_ok = false;
+                state.password.message = '入力にエラーがあります';
+            }
+        }
+        else if (input.key == 'password_confirm') {
+            res = validators.passwordConfirmValidator(input.value);
+            if (res) {
+                state.is_ok = true;
+                state.message = "OK";
+            }else {
+                state.is_ok = false;
+                state.message = "パスワード入力が一致していません";
+            }
+        }
+        let count = 0;
+        for (s in state) {
+            if (s.is_ok){ continue; }
+            count+=1;
+            break;
+        }
+        if (count <= 0) { state.button = true; }
+        state[input.key].value = input.value;
     }
 };
 
