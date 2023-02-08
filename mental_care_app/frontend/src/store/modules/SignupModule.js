@@ -24,7 +24,8 @@ const state = {
         isActive: true,
         is_ok: false
     },
-    button: false
+    button: false,
+    error_message: ""
 };
 
 const getters = {
@@ -42,6 +43,9 @@ const getters = {
     },
     getButton(state) {
         return state.button;
+    },
+    getErrorMessage(state) {
+        return state.error_message;
     }
 }
 
@@ -56,27 +60,48 @@ const actions = {
                     password_confirm: context.state.password_confirm.value
                 });
             const res = api_res.data.message;
-            if (res == "OK"){
-                router.push("/");
+            if (res == ""){
+                context.commit("registor");
+            }else{
+                context.commit("setErrorMessage", res, "all");
             }
-            console.log(res);
         }catch(error) {
             console.log(error);
         }
     },
     inputForm(context, input) {
         context.commit("setForm", input);
+    },
+    async checkEmail(context, key) {
+        const api_res = await axios.post("http://127.0.0.1:5000/api/check_email", {
+            email: context.state.email.value
+        });
+        const res = api_res.data.message;
+        context.commit("setErrorMessage", res, key);
     }
 };
 
 const mutations = {
-    registor(state, response) {
-        if (response === 'success'){
-            state.username = "";
-            state.email = "";
-            state.password = "";
-            state.password_confirm = "";
+    setErrorMessage(state, message, key){
+        if (key == "all"){
+            for (const s in state){
+                state[s].is_ok = false;
+            }
         }
+        else if (message != ""){
+            state[key].is_ok = false;
+            state.button = false;
+        }
+        state.error_message = message;
+    },
+    registor(state) {
+        state.username.value = "";
+        state.email.value = "";
+        state.password.value = "";
+        state.password_confirm.value = "";
+        state.button = false;
+        state.error_message = "";
+        router.push("/");
     },
     setForm(state, input){
         let res = "";
@@ -136,15 +161,30 @@ const mutations = {
             }
         }
         state[input.key].value = input.value;
+        if (input.key == "password") {
+            if (state.password.value == state.password_confirm.value && state.password.is_ok) {
+                state.password_confirm.is_ok = true;
+                state.password_confirm.message = "OK"
+            }
+            else {
+                state.password_confirm.is_ok = false;
+                state.password_confirm.message = "パスワード入力にエラーがあります";
+            }
+        }
         let count = 0;
         for (const idx in state) {
             console.log(state[idx]);
             if (idx == "button"){ continue; }
+            if (idx == "error_message") {
+                if (state[idx] == "") { continue; }
+                else{ count+=1; continue; }
+            }
             if (state[idx].is_ok){ continue; }
             count+=1;
             break;
         }
         if (count <= 0) { state.button = true; }
+        else { state.button = false; }
     }
 };
 

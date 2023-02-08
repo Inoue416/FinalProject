@@ -1,5 +1,7 @@
 import axios from 'axios';
 import * as validators from '../../validators/SignupValidator.js';
+import router from '@/router/index.js';
+
 const state = {
     email: {
         value: "",
@@ -11,7 +13,8 @@ const state = {
         message: "",
         is_ok: false
     },
-    button: false
+    button: false,
+    error_message: ""
 };
 
 const getters = {
@@ -34,9 +37,14 @@ const actions = {
                     email: context.state.email.value,
                     password: context.state.password.value
                 });
-            console.log(api_res);
             const res = api_res.data.message;
+            console.log("api message");
             console.log(res);
+            if (res == "") {
+                context.commit("Success");
+            }else{
+                context.commit("setErrorMessage", res);
+            }
         }catch(error) {
             console.log(error);
         }
@@ -47,11 +55,24 @@ const actions = {
 };
 
 const mutations = {
+    Success(state) {
+        state.email.value = "";
+        state.password.value = "";
+        state.button = false;
+        state.error_message = "";
+        router.push("/");
+    },
+    setErrorMessage(state, message) {
+        state.email.is_ok = false;
+        state.password.is_ok = false;
+        state.button = false;
+        state.error_message = message;
+    },
     setForm(state, input){
         let res = "";
         if (input.key == 'email') {
             res = validators.emailValidator(input.value);
-            if (res === null) {
+            if (res == null) {
                 state.email.is_ok = false;
                 state.email.message = '必須の項目です';
             }else if (res) {
@@ -63,8 +84,8 @@ const mutations = {
             }
         }
         else if (input.key == 'password') {
-            res = validators.passwordValidator(input.value);
-            if (res === null) {
+            res = validators.passwordLoginValidator(input.value);
+            if (res == null) {
                 state.password.is_ok = false;
                 state.password.message = '必須項目です';
             }else if (res) {
@@ -78,13 +99,17 @@ const mutations = {
         state[input.key].value = input.value;
         let count = 0;
         for (const idx in state) {
-            console.log(state[idx]);
             if (idx == "button"){ continue; }
-            if (state[idx].is_ok){ continue; }
+            else if (idx == "error_message"){
+                if (state[idx] == "") { continue; }
+                else { count+=1; continue; }
+            }
+            else if (state[idx].is_ok){ continue; }
             count+=1;
             break;
         }
         if (count <= 0) { state.button = true; }
+        else { state.button = false; }
     }
 };
 
