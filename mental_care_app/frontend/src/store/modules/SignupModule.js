@@ -72,27 +72,35 @@ const actions = {
     inputForm(context, input) {
         context.commit("setForm", input);
     },
-    async checkEmail(context, key) {
-        const api_res = await axios.post("http://127.0.0.1:5000/api/check_email", {
-            email: context.state.email.value
-        });
-        const res = api_res.data.message;
-        context.commit("setErrorMessage", res, key);
+    async checkEmail(context, state_key) {
+        try{
+            const api_res = await axios.post(
+                "http://127.0.0.1:5000/api/check_email", {
+                email: context.state.email.value
+            });
+            const res = api_res.data.message;
+            context.commit("setErrorMessage", {"message": res, "state_key": state_key});
+        } catch(error) {
+            console.log(error);
+        }
     }
 };
 
 const mutations = {
-    setErrorMessage(state, message, key){
-        if (key == "all"){
+    setErrorMessage(state, result){
+        if (result.state_key == "all"){
             for (const s in state){
                 state[s].is_ok = false;
+                state.button = false;
             }
         }
-        else if (message != ""){
-            state[key].is_ok = false;
+        else if (result.message != ""){
+            console.log("state_key: ");
+            console.log(result.state_key);
+            state[result.state_key].is_ok = false;
             state.button = false;
         }
-        state.error_message = message;
+        state.error_message = result.message;
     },
     registor(state) {
         state.username.value = "";
@@ -173,7 +181,6 @@ const mutations = {
         }
         let count = 0;
         for (const idx in state) {
-            console.log(state[idx]);
             if (idx == "button"){ continue; }
             if (idx == "error_message") {
                 if (state[idx] == "") { continue; }

@@ -17,6 +17,13 @@ def passwordValidator(password):
     regexp = r'^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?\d)[a-zA-Z\d]{8,100}$'
     return re.match(regexp, password)
 
+def passwordLoginValidator(password):
+    if (password == None or len(password) <= 0):
+        return None
+    regexp = r'^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?\d)[a-zA-Z\d]{1,100}$'
+    return re.match(regexp, password)
+
+
 if __name__ == "__main__":
     value = [
         "YUya<>a",
