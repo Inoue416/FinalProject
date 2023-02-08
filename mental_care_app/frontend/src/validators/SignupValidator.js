@@ -21,6 +21,12 @@ export function passwordValidator(password) {
     return re.test(password);
 }
 
+export function passwordLoginValidator(password) {
+    if (password === null || password === undefined || password.length <= 0) return null; // null: 必須項目であることを表示する
+    const re = /^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?\d)[a-zA-Z\d]{1,100}$/;
+    return re.test(password);
+}
+
 export function passwordConfirmValidator(is_ok, password, password_confirm){
     if (is_ok == false){
         return null;
