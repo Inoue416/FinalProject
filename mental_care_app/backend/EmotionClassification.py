@@ -13,9 +13,14 @@ class EmotionClassification():
         try:
             for value in result:
                 if value["class_name"] == 'positive':
-                    self.positive = value['confidence']
+                    self.positive = round(value['confidence'], 2)
                     continue
-                self.negative = value['confidence']
+                self.negative = round(value['confidence'], 2)
             return True
         except:
             return None
+
+# if __name__ == "__main__":
+#     cltr = EmotionClassification()
+#     cltr.classification("今日は最悪な日だ。何もかも嫌になる。")
+#     print(cltr.positive, cltr.negative)

@@ -1,3 +1,5 @@
 venv
 setupDB_env.py
 __pycache__
+insert_dumy_data.py
+negaposi_sample.py

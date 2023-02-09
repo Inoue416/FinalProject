@@ -5,6 +5,7 @@ from models.things import Things
 from models.points import Points
 from flask_bcrypt import Bcrypt
 from validators.auth import *
+from EmotionClassification import EmotionClassification
 
 
 bcrypt = Bcrypt(app)
@@ -70,6 +71,15 @@ def check_email():
         return jsonify({"message": "このメールアドレスは既に登録済みです"})
     return jsonify({"message": "Can not this method."})
 
+@app.route("/api/classification", methods=["POST"])
+def classification():
+    if request.method == "POST":
+        pass
+    return jsonify({"message":"Can not this method."})
+
+@app.route("/api/get_data", methods=["GET"])
+def get_data():
+    pass
 
 @app.route("/", defaults={"path":""})
 @app.route("/<path:path>")
