@@ -3,6 +3,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 import os
 from dotenv import load_dotenv
+from flask_marshmallow import Marshmallow
+
 
 # Loading env
 load_dotenv()
@@ -21,6 +23,8 @@ app.secret_key = os.environ['APP_SECRET_KEY']
 
 # Database setting
 db = SQLAlchemy(app)
+ma = Marshmallow(app)
+
 # Loading models
 from models.users import Users
 from models.things import Things

@@ -1,14 +1,16 @@
 from app import app, db
 from flask import render_template, request, jsonify
-from models.users import Users
-from models.things import Things
-from models.points import Points
+from models.users import Users, UsersSchema
+from models.things import Things, ThingsSchema
+from models.points import Points, PointsSchema
 from flask_bcrypt import Bcrypt
 from validators.auth import *
 from EmotionClassification import EmotionClassification
 
 
 bcrypt = Bcrypt(app)
+
+USER_ID = 3  # debug用
 
 
 @app.route("/api/login", methods=["POST"])
@@ -77,9 +79,18 @@ def classification():
         pass
     return jsonify({"message":"Can not this method."})
 
-@app.route("/api/get_data", methods=["GET"])
-def get_data():
-    pass
+@app.route("/api/get_data/<key>", methods=["GET"])
+def get_data(key):
+    if request.method == "GET":
+        print("get_data function...")
+        items = None
+        tschema = ThingsSchema(many=True)
+        if key != "all":
+            pass
+        else:
+            items = Things.query.filter_by(user_id=USER_ID, is_active=True).order_by(Things.updated_at.desc()).all()
+        return jsonify({"items": tschema.dump(items), "message": "send items."})
+    return jsonify({"items": None, "message": "Can not this method."})
 
 @app.route("/", defaults={"path":""})
 @app.route("/<path:path>")

@@ -1,4 +1,4 @@
-from app import db
+from app import db, ma
 from datetime import datetime
 
 class Users(db.Model):
@@ -10,3 +10,6 @@ class Users(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.now(), nullable=False)
     updated_at = db.Column(db.DateTime, default=datetime.now(), onupdate=datetime.now(), nullable=False)
 
+class UsersSchema(ma.Schema):
+    class Meta:
+        fields = ("id", "username")
