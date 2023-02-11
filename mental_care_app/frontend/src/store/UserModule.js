@@ -1,14 +1,10 @@
-import Vuex from 'vuex';
-import SignupModule from './modules/SignupModule';
-import LoginModule from './modules/LoginModule';
 import router from "@/router";
-import ListModule from './modules/ListModule';
 
 const state = {
     user_id: 3,
     username: "井上優也",
     success_message: "",
-    error_message: "",
+    error_message: ""
 }
 
 const getters = {
@@ -35,6 +31,9 @@ const actions = {
     },
     setErrorMessage(context, message) {
         context.commit("setErrorMessage", message);
+    },
+    closeMessage(context, key){
+        context.commit("closeMessage", key);
     }
 }
 
@@ -49,19 +48,18 @@ const mutations = {
     },
     setErrorMessage(state, message) {
         state.error_message = message;
+    },
+    closeMessage(state, key){
+        state[key] = "";
     }
 }
 
-const store = new Vuex.Store({
+const UserModule = {
+    namespaced: true,
     state,
     getters,
     actions,
     mutations,
-    modules: {
-        signupmodule: SignupModule,
-        loginmodule: LoginModule,
-        listmodule: ListModule
-    }
-});
+}
 
-export default store;
+export default UserModule;

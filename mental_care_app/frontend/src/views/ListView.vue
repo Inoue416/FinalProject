@@ -1,8 +1,9 @@
 <script setup>
     import ListComponent from '@/components/ListComponent.vue';
-</script>
+    const moduleName = "listmodule";
+</script>    
 
 <template>
-    <h1>List Page</h1>
-    <ListComponent />
+    <h1>はきだし一覧</h1>
+    <ListComponent :module-name="moduleName"/>
 </template>
