@@ -2,6 +2,6 @@
   import FormComponent from '@/components/FormComponent.vue';
 </script>
 <template>
-  <h1>Form</h1>
+  <h1>はきだし</h1>
   <FormComponent />
 </template>

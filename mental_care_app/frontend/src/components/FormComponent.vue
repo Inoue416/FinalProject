@@ -1,7 +1,7 @@
 <script setup>
-    const message = "hakidashi form."
+    import TextAreaComponent from './form_components/TextAreaComponent.vue';
 </script>
 
 <template>
-    <h2>{{ message }}</h2>
+    <TextAreaComponent />
 </template>
