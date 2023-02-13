@@ -8,8 +8,14 @@ import HakidasiModule from './modules/HakidasiModule';
 const state = {
     user_id: 3,
     username: "井上優也",
-    success_message: "",
-    error_message: "",
+    success_message: {
+        message: "",
+        is_active: false
+    },
+    error_message: {
+        message: "",
+        is_active: false
+    },
 }
 
 const getters = {
@@ -46,10 +52,12 @@ const mutations = {
         router.push("/login")
     },
     setSuccessMessage(state, message) {
-        state.success_message = message;
+        state.success_message.message = message;
+        state.success_message.is_active = true;
     },
     setErrorMessage(state, message) {
-        state.error_message = message;
+        state.error_message.message = message;
+        state.error_message.is_active = true;
     }
 }
 

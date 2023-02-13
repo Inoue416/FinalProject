@@ -1,3 +1,21 @@
+<script setup>
+  import { useStore } from 'vuex';
+  import { computed } from 'vue';
+  const store = useStore();
+  const getSuccessMessage = computed(() => {
+    return store.getters["getSuccessMessage"].message;
+  });
+  const getErrorMessage = computed(() => {
+    return store.getters["getErrorMessage"].message;
+  });
+  const getSuccessActive = computed(() => {
+    return store.getters["getSuccessMessage"].is_active;
+  });
+  const getErrorActive = computed(() => {
+    return store.getters["getErrorMessage"].is_active;
+  });
+</script>
+
 <template>
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
@@ -27,6 +45,8 @@
     </div>
   </nav>
   <div class="container">
-  <router-view/>
+    <div v-if="getSuccessActive" class="alert alert-success" role="alert">{{ getSuccessMessage }}</div>
+    <div v-if="getErrorActive" class="alert alert-danger" role="alert">{{ getErrorMessage }}</div>
+    <router-view/>
   </div>
 </template>
