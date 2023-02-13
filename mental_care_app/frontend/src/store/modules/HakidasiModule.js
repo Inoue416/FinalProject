@@ -1,5 +1,6 @@
 import { textAreaValidator, isTextLength } from "../../validators/TextAreaValidator";
 import router from "@/router";
+import axios from "axios";
 
 const state = {
     error_message: "",
@@ -24,9 +25,30 @@ const getters = {
 const actions = {
     async sendApi(context) {
         // バリデーションを入れる
-        // API通信
-        console.log("POST 送信");
-        context.commit("success");
+        if (!isTextLength(state.text, state.max_length)) {
+            context.commit("checkText", state.text);
+        }
+        else if (!textAreaValidator(state.text)) {
+            context.commit("checkText", state.text);
+        }
+        else{
+            try{
+                console.log("POST送信");
+                const api_res = await axios.post(
+                    "http://127.0.0.1:5000/api/classification",
+                    {
+                        text: state.text
+                    }
+                );
+                const res = api_res.data.message;
+                console.log(res);
+                context.commit("success");
+            }catch(error) {
+                console.log(error);
+                console.log("サーバーに接続できませんでした");
+                context.commit("setErrorMessage", "サーバーに接続できませんでした");
+            }
+        }
     },
     setErrorMessage(context, message) {
         context.commit("setErrorMessage", message);

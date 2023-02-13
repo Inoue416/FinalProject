@@ -76,7 +76,9 @@ def check_email():
 @app.route("/api/classification", methods=["POST"])
 def classification():
     if request.method == "POST":
-        pass
+        form_data = request.get_json()
+        print(form_data)
+        return jsonify({"message": "データを記録しました"})
     return jsonify({"message":"Can not this method."})
 
 @app.route("/api/get_data/<key>", methods=["GET"])
