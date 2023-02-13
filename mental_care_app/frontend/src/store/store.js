@@ -3,6 +3,7 @@ import SignupModule from './modules/SignupModule';
 import LoginModule from './modules/LoginModule';
 import router from "@/router";
 import ListModule from './modules/ListModule';
+import HakidasiModule from './modules/HakidasiModule';
 
 const state = {
     user_id: 3,
@@ -60,7 +61,8 @@ const store = new Vuex.Store({
     modules: {
         signupmodule: SignupModule,
         loginmodule: LoginModule,
-        listmodule: ListModule
+        listmodule: ListModule,
+        hakidasimodule: HakidasiModule
     }
 });
 

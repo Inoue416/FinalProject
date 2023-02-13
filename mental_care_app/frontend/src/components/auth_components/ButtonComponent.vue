@@ -29,7 +29,7 @@
         store.dispatch(set_query);
     };
 </script>
-<!-- TODO: Clickイベントをいれる -->
+
 <template>
     <button :type="props.buttonType" :class="props.buttonStyle" :disabled="!isActive" @click="setApi">{{ props.buttonLabel }}</button>
 </template>
