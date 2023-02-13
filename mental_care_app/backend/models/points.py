@@ -6,8 +6,8 @@ class Points(db.Model):
     thing_id = db.Column(db.Integer, nullable=False)
     positive = db.Column(db.Float, nullable=False)
     negative = db.Column(db.Float, nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.now(), nullable=False)
-    updated_at = db.Column(db.DateTime, default=datetime.now(), onupdate=datetime.now(), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.now().replace(microsecond=0), nullable=False)
+    updated_at = db.Column(db.DateTime, default=datetime.now().replace(microsecond=0), onupdate=datetime.now().replace(microsecond=0), nullable=False)
 
 class PointsSchema(ma.Schema):
     class Meta:

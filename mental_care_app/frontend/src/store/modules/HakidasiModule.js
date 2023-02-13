@@ -41,8 +41,13 @@ const actions = {
                     }
                 );
                 const res = api_res.data.message;
-                console.log(res);
-                context.commit("success");
+                console.log(api_res.data.success);
+                if (!api_res.data.success) { context.commit("setErrorMessage", res); }
+                else{
+                    console.log(res);
+                    context.commit("success");
+                }
+                
             }catch(error) {
                 console.log(error);
                 console.log("サーバーに接続できませんでした");

@@ -6,9 +6,11 @@ from models.points import Points, PointsSchema
 from flask_bcrypt import Bcrypt
 from validators.auth import *
 from EmotionClassification import EmotionClassification
+from validators.hakidasi import *
 
 
 bcrypt = Bcrypt(app)
+classificator = EmotionClassification()
 
 USER_ID = 3  # debug用
 
@@ -76,10 +78,35 @@ def check_email():
 @app.route("/api/classification", methods=["POST"])
 def classification():
     if request.method == "POST":
-        form_data = request.get_json()
-        print(form_data)
-        return jsonify({"message": "データを記録しました"})
-    return jsonify({"message":"Can not this method."})
+        form_data = request.get_json()  # フォームデータの受け取り
+        if not isTextLength(form_data["text"]):
+            return jsonify({"success":False, "message": "入力にエラーがあります"})
+        if hakidasiValidator(form_data["text"]):
+            return jsonify({"success":False, "message": "入力にエラーがあります"})
+        # ネガポジ判定
+        classificator.classification(form_data["text"])
+        
+        
+        #try:
+        thing = Things(
+            user_id = USER_ID,
+            things = form_data["text"],
+            total = round(classificator.positive - classificator.negative, 2),
+            is_active = True
+        )
+        db.session.add(thing)
+        db.session.commit()
+        point = Points(
+            thing_id = thing.id,
+            positive = classificator.positive,
+            negative = classificator.negative,
+        )
+        db.session.add(point)
+        db.session.commit()
+        # except:
+        #     return jsonify({"success":False, "message": "エラーが発生しました"})
+        return jsonify({"success": True, "message": "データを記録しました"})
+    return jsonify({"success": False, "message":"Can not this method."})
 
 @app.route("/api/get_data/<key>", methods=["GET"])
 def get_data(key):

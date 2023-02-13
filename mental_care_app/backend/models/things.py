@@ -8,8 +8,8 @@ class Things(db.Model):
     things = db.Column(db.String(255), nullable=False)
     total = db.Column(db.Float, nullable=False)
     is_active = db.Column(db.Boolean, default=True, nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.now(), nullable=False)
-    updated_at = db.Column(db.DateTime, default=datetime.now(), onupdate=datetime.now(), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.now().replace(microsecond=0), nullable=False)
+    updated_at = db.Column(db.DateTime, default=datetime.now().replace(microsecond=0), onupdate=datetime.now().replace(microsecond=0), nullable=False)
 
 class ThingsSchema(ma.Schema):
     class Meta:
