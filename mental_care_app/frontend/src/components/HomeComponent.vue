@@ -1,25 +1,19 @@
 <script setup>
     import { useStore } from 'vuex';
     import ChartComponent from './home_components/ChartComponent.vue';
-    //import { ref, mounted } from 'vue';
-   
-    const message = "Welcome Home";
+    import ListComponent from './ListComponent.vue';
+    import { ref } from 'vue';
+    const moduleName = "listmodule";
+    const kindKey = ref("today");
     const store = useStore();
-    
 </script>
 
 <template>
-    <h1>{{ message }}</h1>
-    <h2>{{ store.getters["getUserName"] }}</h2>
+    <div class="username-area">ようこそ<b>{{ store.getters["getUserName"] }}</b>さん!</div>
     <div class="chart-area border border-dark mt-3">
-        <ChartComponent />
+        <ChartComponent :module-name="moduleName" :kind-key="kindKey"/>
+    </div>
+    <div class="list-area mt-3">
+        <ListComponent :module-name="moduleName" :kind-key="kindKey"/>
     </div>
 </template>
-
-<style scoped>
-    .chart-area {
-        width: 100%;
-        height: 40%;
-
-    };
-</style>

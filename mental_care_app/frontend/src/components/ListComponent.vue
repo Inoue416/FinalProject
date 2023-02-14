@@ -2,7 +2,7 @@
 // IF: propsでkeyを入れて制御するかも
     import { useStore } from 'vuex';
     import { computed, defineProps, onBeforeMount, ref } from 'vue';
-    const kindKey = "all"
+    //const kindKey = "all"
     let all_data = [];
     const start = ref(0);
     const end = ref(0);
@@ -10,8 +10,13 @@
         moduleName: {
             type:String,
             required: true
+        },
+        kindKey: {
+            type: String,
+            required: true
         }
     });
+    
     const tr_classes = (total) => {
         if (total > 0) { return "table-warning"; }
         if (total < 0) { return "table-secondary"; }
@@ -49,7 +54,9 @@
     });
     
     onBeforeMount(async () => {
-        await store.dispatch(setQuery, kindKey);
+        if ((store.getters[getQuery]).length == 0){
+            await store.dispatch(setQuery, props.kindKey);
+        } else { console.log("data load skip..."); }
         all_data = store.getters[getQuery];
         console.log("Before Mount: ");
         console.log(all_data);
@@ -62,7 +69,7 @@
 </script>
 
 <template>
-    <p>{{ getErrorMessage }}</p>
+    <div>{{ getErrorMessage }}</div>
     <table class="table">
         <thead>
             <tr>
