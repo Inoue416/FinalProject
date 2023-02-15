@@ -17,5 +17,5 @@ class ThingsSchema(ma.Schema):
             "id",
             "things",
             "total",
-            "updated_at"
+            "created_at"
         )

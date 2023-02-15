@@ -87,14 +87,15 @@ def classification():
             return jsonify({"success":False, "message": "入力にエラーがあります"})
         # ネガポジ判定
         classificator.classification(form_data["text"])
-        
-        
+        now_time = datetime.now().replace(microsecond=0)
         #try:
         thing = Things(
             user_id = USER_ID,
             things = form_data["text"],
             total = round(classificator.positive - classificator.negative, 2),
-            is_active = True
+            is_active = True,
+            created_at = now_time,
+            updated_at = now_time
         )
         db.session.add(thing)
         db.session.commit()
@@ -102,6 +103,8 @@ def classification():
             thing_id = thing.id,
             positive = classificator.positive,
             negative = classificator.negative,
+            created_at = now_time,
+            updated_at = now_time
         )
         db.session.add(point)
         db.session.commit()
