@@ -54,9 +54,7 @@
     });
     
     onBeforeMount(async () => {
-        if ((store.getters[getQuery]).length == 0){
-            await store.dispatch(setQuery, props.kindKey);
-        } else { console.log("data load skip..."); }
+        await store.dispatch(setQuery, props.kindKey);
         all_data = store.getters[getQuery];
         console.log("Before Mount: ");
         console.log(all_data);
@@ -86,7 +84,7 @@
                 <td v-if="item.total > 0">ポジティブ</td>
                 <td v-if="item.total < 0">ネガティブ</td>
                 <td v-if="item.total == 0.0">-</td>
-                <td>{{ item.updated_at.replace("T", " ") }}</td>
+                <td>{{ item.created_at.replace("T", " ") }}</td>
             </tr>
         </tbody>
     </table>

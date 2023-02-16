@@ -1,10 +1,9 @@
 <script setup>
-  import { Line } from 'vue-chartjs';
-  import { Chart as ChartJS, Title, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement } from 'chart.js';
+  import { Chart, registerables } from 'chart.js';
   import { useStore } from 'vuex';
-  import { onMounted, reactive, defineProps, onBeforeMount } from 'vue';
+  import { defineProps, onBeforeMount, ref } from 'vue';
 
-  ChartJS.register(Title, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement);
+  Chart.register(...registerables);
   const props = defineProps({
     kindKey: {
       type: String,
@@ -18,47 +17,54 @@
   let all_data = [];
 
   const store = useStore();
-  const chartData = reactive({
-    datasets: [
-      {data: [] }
-    ]
+  const chartData = ref({
+    labels: [],
+    datasets: [{
+      label: "ネガポジ",
+      data: [],
+      tension: 0.1,
+      borderColor: 'rgb(255, 192, 203)'
+    }]
   });
 
   const chartOptions = {
-    responsive: true
+    responsive: true,
+    scales: {
+      y: {
+        suggestedMin: -1,
+        suggestedMax: 1,
+      }
+    }
   };
+  
   const getQuery = props.moduleName + "/getData";
   const setQuery = props.moduleName + "/setData";
-
+  const renderChart = () => {
+    let lineElem = document.querySelector("#line-chart");
+    new Chart(lineElem, {
+      type: 'line',
+      data: {
+        labels: chartData.value.labels,
+        datasets: chartData.value.datasets
+      },
+      options: chartOptions
+    })
+  };
   onBeforeMount(async () => {
-    if ((store.getters[getQuery]).length == []) {
-      await store.dispatch(setQuery, props.kindKey);
-    } else {
-      console.log("data load skip...");
-    }
-    all_data = store.getters[getQuery];
     console.log("Before Mount: ");
-    console.log(all_data);
-  });
-
-  onMounted(() => {
-    console.log("Mounted:");
-    console.log(chartData);
+    await store.dispatch(setQuery, props.kindKey);
     all_data = store.getters[getQuery];
-    all_data = all_data.reverse();
-    for (const idx in all_data){
-      console.log(all_data[idx].created_at);
-      console.log(all_data[idx].total);
-      chartData.datasets.data.push({x:all_data[idx].created_at, y:all_data[idx].total});
+    let all_data_reverse = all_data.reverse();
+    console.log("Create chart dataset.");
+    for (const elem of all_data_reverse){
+      chartData.value.labels.push(elem.created_at.replace("T", " "));
+      chartData.value.datasets[0].data.push(elem.total);
     }
-    console.log(all_data);
+    renderChart();
   });
 </script>
 
 <template>
-  <Line
-    id="my-chart-id"
-    :options="chartOptions"
-    :data="chartData"
-  />
+  <!-- <Line id="line-chart" :data="chartData" :options="chartOptions"/> -->
+  <canvas id="line-chart"></canvas>
 </template>
