@@ -7,6 +7,8 @@ from flask_bcrypt import Bcrypt
 from validators.auth import *
 from EmotionClassification import EmotionClassification
 from validators.hakidasi import *
+from datetime import datetime
+from sqlalchemy import func as F, extract, and_
 
 
 bcrypt = Bcrypt(app)
@@ -85,14 +87,15 @@ def classification():
             return jsonify({"success":False, "message": "入力にエラーがあります"})
         # ネガポジ判定
         classificator.classification(form_data["text"])
-        
-        
+        now_time = datetime.now().replace(microsecond=0)
         #try:
         thing = Things(
             user_id = USER_ID,
             things = form_data["text"],
             total = round(classificator.positive - classificator.negative, 2),
-            is_active = True
+            is_active = True,
+            created_at = now_time,
+            updated_at = now_time
         )
         db.session.add(thing)
         db.session.commit()
@@ -100,6 +103,8 @@ def classification():
             thing_id = thing.id,
             positive = classificator.positive,
             negative = classificator.negative,
+            created_at = now_time,
+            updated_at = now_time
         )
         db.session.add(point)
         db.session.commit()
@@ -114,10 +119,19 @@ def get_data(key):
         print("get_data function...")
         items = None
         tschema = ThingsSchema(many=True)
-        if key != "all":
-            pass
+        today = datetime.now()
+        if key == "all":
+            items = Things.query.filter_by(user_id=USER_ID, is_active=True).order_by(Things.created_at.desc()).all()
         else:
-            items = Things.query.filter_by(user_id=USER_ID, is_active=True).order_by(Things.updated_at.desc()).all()
+            items = Things.query.filter(
+                and_(extract('year', Things.created_at) == today.year, 
+                extract('month', Things.created_at) == today.month, 
+                extract('day', Things.created_at) == today.day)
+            ).filter_by(
+                user_id=USER_ID, 
+                is_active=True,
+            ).order_by(Things.created_at.desc()).all()
+            print(tschema.dump(items))
         return jsonify({"items": tschema.dump(items), "message": "send items."})
     return jsonify({"items": None, "message": "Can not this method."})
 

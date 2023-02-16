@@ -46,7 +46,7 @@ const actions = {
         } catch(error) {
             console.log(error);
             console.log("サーバーにアクセスできませんでした。");
-            context.commit("setErrorMessage", "サーバーにアクセルできませんでした");
+            context.commit("setErrorMessage", "サーバーに接続できませんでした");
         }
     },
     changeData(context, page) {
