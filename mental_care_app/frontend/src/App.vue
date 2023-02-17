@@ -14,6 +14,15 @@
   const getErrorActive = computed(() => {
     return store.getters["getErrorMessage"].is_active;
   });
+  const logout = () => {
+    store.dispatch("logout");
+  };
+  const closeSuccessMessage = () => {
+    store.dispatch("closeSuccessMessage");
+  };
+  const closeErrorMessage = () => {
+    store.dispatch("closeErrorMessage");
+  }
 </script>
 
 <template>
@@ -40,13 +49,16 @@
           <li class="nav-item">
             <router-link to="/list" class="nav-link active">はきだし一覧</router-link>
           </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="#" @click="logout">ログアウト</a>
+          </li>
         </ul>
       </div>
     </div>
   </nav>
   <div class="container">
-    <div v-if="getSuccessActive" class="alert alert-success" role="alert">{{ getSuccessMessage }}</div>
-    <div v-if="getErrorActive" class="alert alert-danger" role="alert">{{ getErrorMessage }}</div>
+    <div v-if="getSuccessActive" class="alert alert-success d-flex justify-content-between" role="alert">{{ getSuccessMessage }}<button type="button" class="btn-close" aria-label="Close" @click="closeSuccessMessage"></button></div>
+    <div v-if="getErrorActive" class="alert alert-danger d-flex justify-content-between" role="alert">{{ getErrorMessage }}<button type="button" class="btn-close" aria-label="Close" @click="closeErrorMessage"></button></div>
     <router-view/>
   </div>
 </template>

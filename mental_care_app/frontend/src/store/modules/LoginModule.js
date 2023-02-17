@@ -1,6 +1,7 @@
-import axios from 'axios';
+import axios from '../../lib/axios';
 import * as validators from '../../validators/SignupValidator.js';
 import router from '@/router/index.js';
+import store from '../store';
 
 const state = {
     email: {
@@ -13,8 +14,7 @@ const state = {
         message: "",
         is_ok: false
     },
-    button: false,
-    error_message: ""
+    button: false
 };
 
 const getters = {
@@ -37,16 +37,21 @@ const actions = {
                     email: context.state.email.value,
                     password: context.state.password.value
                 });
-            const res = api_res.data.message;
+            const res = await api_res.data.message;
             console.log("api message");
             console.log(res);
-            if (res == "") {
+            if (res == "200") {
+                store.state.username = api_res.data.username;
+                store.state.is_login = true;
+                store.state.success_message.message = "ログインしました"
+                store.state.success_message.is_active = true;
                 context.commit("Success");
             }else{
                 context.commit("setErrorMessage", res);
             }
         }catch(error) {
             console.log(error);
+            context.commit("setErrorMessage", "サーバーにアクセスできませんでした");
         }
     },
     inputForm(context, input) {
@@ -57,16 +62,20 @@ const actions = {
 const mutations = {
     Success(state) {
         state.email.value = "";
+        state.email.message = "";
+        state.email.is_ok = false;
         state.password.value = "";
+        state.password.message = "";
+        state.password.is_ok = false;
         state.button = false;
-        state.error_message = "";
+        state.error_message.value = "";
+        state.error_message.is_active = false;
         router.push("/");
     },
     setErrorMessage(state, message) {
-        state.email.is_ok = false;
-        state.password.is_ok = false;
         state.button = false;
-        state.error_message = message;
+        store.state.error_message.message = message;
+        store.state.error_message.is_active = true;
     },
     setForm(state, input){
         let res = "";
@@ -100,10 +109,6 @@ const mutations = {
         let count = 0;
         for (const idx in state) {
             if (idx == "button"){ continue; }
-            else if (idx == "error_message"){
-                if (state[idx] == "") { continue; }
-                else { count+=1; continue; }
-            }
             else if (state[idx].is_ok){ continue; }
             count+=1;
             break;

@@ -4,6 +4,7 @@ from flask_migrate import Migrate
 import os
 from dotenv import load_dotenv
 from flask_marshmallow import Marshmallow
+from datetime import timedelta
 
 
 # Loading env
@@ -20,6 +21,9 @@ app = Flask(
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DB_URI']
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.secret_key = os.environ['APP_SECRET_KEY']
+app.config["SESSION_COOKIE_SAMESITE"] = 'Strict'
+# app.config["SESSION_COOKIE-SECURE"] = True
+app.permanent_session_lifetime = timedelta(hours=1)
 
 # Database setting
 db = SQLAlchemy(app)

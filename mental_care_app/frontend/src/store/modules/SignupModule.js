@@ -1,6 +1,7 @@
-import axios from 'axios';
+import axios from '../../lib/axios';
 import * as validators from '../../validators/SignupValidator.js';
 import router from '@/router/index.js';
+import store from '../store';
 
 const state = {
     username: {
@@ -25,7 +26,10 @@ const state = {
         is_ok: false
     },
     button: false,
-    error_message: ""
+    error_message: {
+        value: "",
+        is_active: false
+    }
 };
 
 const getters = {
@@ -43,9 +47,6 @@ const getters = {
     },
     getButton(state) {
         return state.button;
-    },
-    getErrorMessage(state) {
-        return state.error_message;
     }
 }
 
@@ -60,7 +61,10 @@ const actions = {
                     password_confirm: context.state.password_confirm.value
                 });
             const res = api_res.data.message;
-            if (res == ""){
+            if (res == "200"){
+                store.state.username = context.state.username.value;
+                store.state.success_message.message = "登録完了";
+                store.state.success_message.is_active = true;
                 context.commit("registor");
             }else{
                 context.commit("setErrorMessage", res, "all");
@@ -82,6 +86,7 @@ const actions = {
             context.commit("setErrorMessage", {"message": res, "state_key": state_key});
         } catch(error) {
             console.log(error);
+            context.commit("setErrorMessage", {"message": "サーバーに接続できませんでした", "state_key": state_key});
         }
     }
 };
@@ -89,26 +94,27 @@ const actions = {
 const mutations = {
     setErrorMessage(state, result){
         if (result.state_key == "all"){
-            for (const s in state){
-                state[s].is_ok = false;
-                state.button = false;
-            }
-        }
-        else if (result.message != ""){
-            console.log("state_key: ");
-            console.log(result.state_key);
-            state[result.state_key].is_ok = false;
             state.button = false;
         }
-        state.error_message = result.message;
+        else if (result.message != ""){
+            state.button = false;
+        }
+        store.state.error_message.message = result.message;
+        store.state.error_message.is_active = true;
     },
     registor(state) {
         state.username.value = "";
+        state.username.is_ok = false;
         state.email.value = "";
+        state.email.is_ok = false;
         state.password.value = "";
+        state.password.is_ok = false;
         state.password_confirm.value = "";
+        state.password_confirm.isActive = true;
+        state.password_confirm.is_ok = false;
         state.button = false;
-        state.error_message = "";
+        state.error_message.value = "";
+        state.error_message.is_active = false;
         router.push("/");
     },
     setForm(state, input){
@@ -182,10 +188,6 @@ const mutations = {
         let count = 0;
         for (const idx in state) {
             if (idx == "button"){ continue; }
-            if (idx == "error_message") {
-                if (state[idx] == "") { continue; }
-                else{ count+=1; continue; }
-            }
             if (state[idx].is_ok){ continue; }
             count+=1;
             break;

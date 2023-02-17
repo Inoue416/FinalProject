@@ -2,7 +2,7 @@
     import { useStore } from 'vuex';
     import ChartComponent from './home_components/ChartComponent.vue';
     import ListComponent from './ListComponent.vue';
-    import { ref, onBeforeMount } from 'vue';
+    import { ref, onBeforeMount, computed } from 'vue';
     const listModuleName = "listmodule";
     const chartModuleName = "chartmodule";
     const kindKey = ref("today");
@@ -57,11 +57,13 @@
     chartData.value.labels = labels.concat();
     chartData.value.datasets[0].data = data.concat();
     });
-
+    const getUserName = computed(()=>{
+        return store.getters["getUserName"];
+    })
 </script>
 
 <template>
-    <div class="username-area">ようこそ<b>{{ store.getters["getUserName"] }}</b>さん!</div>
+    <div class="username-area">ようこそ<b>{{ getUserName }}</b>さん!</div>
     <div class="chart-area border border-dark mt-3">
         <ChartComponent :module-name="chartModuleName" :kind-key="kindKey" :chart-data="chartData" :chart-options="chartOptions"/>
     </div>
