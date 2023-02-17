@@ -24,6 +24,11 @@ def check_login():
         return True
     return False
 
+@app.route("/api/is_login", methods=["GET"])
+def is_login():
+    if check_login():
+        return jsonify({"username": session["username"], "message": "AL"})
+    return jsonify({"username":"", "message":"NL"})
 
 @app.route("/api/login", methods=["POST"])
 def login():
@@ -42,6 +47,7 @@ def login():
         if not(bcrypt.check_password_hash(user.password, form_data["password"])):
             return jsonify({"message": "パスワードに間違いがあります"})
         session["user_id"] = user.id
+        session["username"] = user.username
         return jsonify({"message":"200", "username": user.username})
     return jsonify({"message":"Can not this method."})
 

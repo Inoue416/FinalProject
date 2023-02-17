@@ -1,6 +1,7 @@
 import { textAreaValidator, isTextLength } from "../../validators/TextAreaValidator";
 import router from "@/router";
 import axios from "axios";
+import store from "../store";
 
 
 const state = {
@@ -43,7 +44,7 @@ const actions = {
                 );
                 const res = api_res.data.message;
                 console.log(api_res.data.success);
-                if (!api_res.data.success) { context.commit("setErrorMessage", res); }
+                if (!api_res.data.success) { context.commit("setErrorArea", res); }
                 else{
                     console.log(res);
                     context.commit("success");
@@ -56,6 +57,9 @@ const actions = {
             }
         }
     },
+    setErrorArea(context, message) {
+        context.commit("setErrorArea", message);
+    },
     setErrorMessage(context, message) {
         context.commit("setErrorMessage", message);
     },
@@ -66,8 +70,13 @@ const actions = {
 
 const mutations = {
     setErrorMessage(state, message) {
-        state.error_message = message;
+        console.log(state.error_message_text_area);
+        store.state.error_message.message = message;
+        store.state.error_message.is_active = true;
     },
+    setErrorArea(state, message) {
+        state.error_message_text_area = message;
+    }, 
     success(state) {
         state.error_message = "";
         state.button = false;

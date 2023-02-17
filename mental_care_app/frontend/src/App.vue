@@ -1,6 +1,6 @@
 <script setup>
   import { useStore } from 'vuex';
-  import { computed } from 'vue';
+  import { computed, onBeforeMount } from 'vue';
   const store = useStore();
   const getSuccessMessage = computed(() => {
     return store.getters["getSuccessMessage"].message;
@@ -14,6 +14,9 @@
   const getErrorActive = computed(() => {
     return store.getters["getErrorMessage"].is_active;
   });
+  const getIsLogin = computed(() => {
+    return store.getters["getIsLogin"];
+  })
   const logout = () => {
     store.dispatch("logout");
   };
@@ -23,6 +26,10 @@
   const closeErrorMessage = () => {
     store.dispatch("closeErrorMessage");
   }
+  onBeforeMount(async() => {
+      await store.dispatch("checkLogin");
+    }
+  );
 </script>
 
 <template>
@@ -38,19 +45,19 @@
             <router-link to="/" class="nav-link active">ホーム</router-link>
           </li>
           <li class="nav-item">
-            <router-link to="/login" class="nav-link active">ログイン</router-link>
+            <router-link to="/login" class="nav-link active" v-if="!getIsLogin">ログイン</router-link>
           </li>
           <li class="nav-item">
-            <router-link to="/signup" class="nav-link active">サインアップ</router-link>
+            <router-link to="/signup" class="nav-link active" v-if="!getIsLogin">サインアップ</router-link>
           </li>
           <li class="nav-item">
-            <router-link to="/form" class="nav-link active">はきだし</router-link>
+            <router-link to="/form" class="nav-link active" v-if="getIsLogin">はきだし</router-link>
           </li>
           <li class="nav-item">
-            <router-link to="/list" class="nav-link active">はきだし一覧</router-link>
+            <router-link to="/list" class="nav-link active" v-if="getIsLogin">はきだし一覧</router-link>
           </li>
           <li class="nav-item">
-            <a class="nav-link active" href="#" @click="logout">ログアウト</a>
+            <a class="nav-link active" href="#" @click="logout" v-if="getIsLogin">ログアウト</a>
           </li>
         </ul>
       </div>

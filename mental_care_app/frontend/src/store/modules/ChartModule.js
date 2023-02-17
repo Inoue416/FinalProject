@@ -1,17 +1,13 @@
 import axios from "axios";
-
+import store from "../store";
 
 const state = {
     items: [],
-    error_message: ""
 }
 
 const getters = {
     getData(state){
         return state.items;
-    },
-    getErrorMessage(state) {
-        return state.error_message;
     }
 }
 
@@ -39,7 +35,8 @@ const mutations = {
         state.items = items;
     },
     setErrorMessage(state, message) {
-        state.error_message = message;
+        store.state.error_message.message = message;
+        store.state.error_message.is_active = true;
     }
 }
 

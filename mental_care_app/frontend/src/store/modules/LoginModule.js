@@ -68,8 +68,6 @@ const mutations = {
         state.password.message = "";
         state.password.is_ok = false;
         state.button = false;
-        state.error_message.value = "";
-        state.error_message.is_active = false;
         router.push("/");
     },
     setErrorMessage(state, message) {

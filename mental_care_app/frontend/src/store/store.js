@@ -27,8 +27,8 @@ const getters = {
     getUserName(state) {
         return state.username;
     },
-    getUserId(state) {
-        return state.user_id;
+    getIsLogin(state) {
+        return state.is_login;
     },
     getSuccessMessage(state) {
         return state.success_message;
@@ -59,6 +59,18 @@ const actions = {
     },
     closeErrorMessage(context) {
         context.commit("closeErrorMessage");
+    },
+    async checkLogin(context) {
+        try{
+            const api_res = await axios.get("http://127.0.0.1:5000/api/is_login");
+            if (api_res.data.message == "AL") {
+                context.state.is_login = true;
+                context.state.username = api_res.data.username;
+            }
+        } catch(error) {
+            console.log(error);
+            context.commit("setErrorMessage", "サーバーに接続できませんでした")
+        }
     }
 }
 

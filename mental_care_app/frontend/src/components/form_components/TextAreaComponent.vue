@@ -13,9 +13,6 @@
     const checkText = () => {
         store.dispatch(props.moduleName+"/checkText", text.value);
     };
-    const getErrorMessage = computed(() => {
-        return store.getters[props.moduleName+"/getErrorMessage"];
-    });
     const getErrorMessageTextArea = computed(() => {
         return store.getters[props.moduleName + "/getErrorMessageTextArea"];
     });
@@ -25,7 +22,6 @@
 </script>
 
 <template>
-    <p>{{ getErrorMessage }}</p>
     <div class="form-area">
         <div class="mt-3">
             <label for="HakidasiArea" class="form-label"><b>今思ってることをはきだそう！</b></label>

@@ -9,6 +9,6 @@
     <HomeComponent />
   </div>
   <div v-if="!store.state.is_login">
-    <h1>さあ、嫌なことは全部はきだそう!</h1>
+    <h1 class="mt-3">さあ、嫌なことは全部はきだそう!</h1>
   </div>
 </template>

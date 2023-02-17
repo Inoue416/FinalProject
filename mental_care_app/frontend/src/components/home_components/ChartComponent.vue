@@ -65,6 +65,5 @@
 </script>
 
 <template>
-  <!-- <Line id="line-chart" :data="chartData" :options="chartOptions"/> -->
   <canvas id="line-chart"></canvas>
 </template>

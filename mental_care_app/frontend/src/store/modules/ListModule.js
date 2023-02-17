@@ -1,22 +1,15 @@
 import axios from "axios";
-
+import store from "../store";
 
 const state = {
     items: [],
     now_pg: 0,
     max_pg: 1,
-    error_message: ""
 }
 
 const getters = {
     getData(state){
-        // if (state.items == []) { return []; }
-        // if (state.now_pg > state.max_pg) { return state.items[0]; }
-        // return state.items[state.now_pg];
         return state.items;
-    },
-    getErrorMessage(state) {
-        return state.error_message;
     },
     getPageInfo(state){
         let pages = [];
@@ -33,7 +26,7 @@ const getters = {
 }
 
 const actions = {
-    async setData(context, key) { // IF: keyで制御できるようにしたい(とりあえずは全てをとってくる:all)
+    async setData(context, key) {
         try{
             console.log(key);
             const api_res = await axios.get(
@@ -57,8 +50,6 @@ const actions = {
 const mutations = {
     setData(state, items){
         state.items = items;
-        // let item = [];
-        // let count = 0;
         let len = items.length;
         let page = parseInt(len / 10);
         if (len % 10 == 0) {
@@ -66,20 +57,11 @@ const mutations = {
             page -= 1;
         }
         state.max_pg = page;
-        state.now_pg = 0;
-        
-        // for (const it of items) {
-        //     if (count == 10){
-        //         state.items.push(item.concat());
-        //         count = 0;
-        //         item = [];
-        //     }
-        //     item.push(it);
-        //     count += 1;
-        // }
+        state.now_pg = 0;        
     },
-    setErrorMessage(state, message) {
-        state.error_message = message;
+    setErrorMessage(message) {
+        store.state.error_message.message = message;
+        store.state.error_message.is_active = true;
     },
     changeData(state, page) {
         console.log("Mutation: "+page);

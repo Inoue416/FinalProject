@@ -25,11 +25,7 @@ const state = {
         isActive: true,
         is_ok: false
     },
-    button: false,
-    error_message: {
-        value: "",
-        is_active: false
-    }
+    button: false
 };
 
 const getters = {
@@ -99,8 +95,10 @@ const mutations = {
         else if (result.message != ""){
             state.button = false;
         }
-        store.state.error_message.message = result.message;
-        store.state.error_message.is_active = true;
+        if (result.message != ""){
+            store.state.error_message.message = result.message;
+            store.state.error_message.is_active = true;    
+        }
     },
     registor(state) {
         state.username.value = "";
@@ -113,8 +111,6 @@ const mutations = {
         state.password_confirm.isActive = true;
         state.password_confirm.is_ok = false;
         state.button = false;
-        state.error_message.value = "";
-        state.error_message.is_active = false;
         router.push("/");
     },
     setForm(state, input){
