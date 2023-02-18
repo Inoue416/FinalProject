@@ -1,6 +1,6 @@
 <script setup>
   import { useStore } from 'vuex';
-  import { computed, onBeforeMount } from 'vue';
+  import { computed, onBeforeMount, watch, ref } from 'vue';
   const store = useStore();
   const getSuccessMessage = computed(() => {
     return store.getters["getSuccessMessage"].message;
@@ -16,7 +16,7 @@
   });
   const getIsLogin = computed(() => {
     return store.getters["getIsLogin"];
-  })
+  });
   const logout = () => {
     store.dispatch("logout");
   };
@@ -25,15 +25,33 @@
   };
   const closeErrorMessage = () => {
     store.dispatch("closeErrorMessage");
-  }
+  };
+  const navColor = ref("navbar navbar-expand-lg navbar-light bg-light");
+  const getNavColor = computed(() => {
+    return navColor.value;
+  });
+  
   onBeforeMount(async() => {
       await store.dispatch("checkLogin");
     }
   );
+  watch(() => store.getters["getNowPoint"], function () {
+    console.log("watch...");
+    console.log(navColor.value);
+    let nowp = store.getters["getNowPoint"];
+    if (nowp < 0) {
+      navColor.value = "navbar navbar-expand-lg navbar-light bg-secondary";
+    }else if (nowp > 0){
+      navColor.value = "navbar navbar-expand-lg navbar-light bg-warning";
+    } else {
+      navColor.value = "navbar navbar-expand-lg navbar-light bg-light";
+    }
+  });
+  
 </script>
 
 <template>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <nav :class="getNavColor">
     <div class="container-fluid">
       <router-link to="/" class="navbar-brand">はきだしケア</router-link>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">

@@ -14,8 +14,6 @@ from sqlalchemy import func as F, extract, and_
 bcrypt = Bcrypt(app)
 classificator = EmotionClassification()
 
-USER_ID = 3  # debug用
-
 # login状態の確認を行う
 def check_login():
     if session.get("user_id"):
@@ -119,7 +117,7 @@ def classification():
         now_time = datetime.now().replace(microsecond=0)
         try:
             thing = Things(
-                user_id = USER_ID,
+                user_id = session["user_id"],
                 things = form_data["text"],
                 total = round(classificator.positive - classificator.negative, 2),
                 is_active = True,
@@ -161,7 +159,7 @@ def get_data(key):
                 extract('month', Things.created_at) == today.month, 
                 extract('day', Things.created_at) == today.day)
             ).filter_by(
-                user_id=USER_ID, 
+                user_id=session["user_id"], 
                 is_active=True,
             ).order_by(Things.created_at.desc()).all()
             print(tschema.dump(items))

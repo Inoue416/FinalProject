@@ -13,6 +13,7 @@ import axios from '../lib/axios';
 const state = {
     username: "",
     is_login: false,
+    now_point: 0,
     success_message: {
         message: "",
         is_active: false
@@ -35,6 +36,9 @@ const getters = {
     },
     getErrorMessage(state) {
         return state.error_message;
+    },
+    getNowPoint(state) {
+        return state.now_point;
     }
 }
 
@@ -71,6 +75,9 @@ const actions = {
             console.log(error);
             context.commit("setErrorMessage", "サーバーに接続できませんでした")
         }
+    },
+    setNowPoint(context, point) {
+        context.commit("setNowPoint", point);
     }
 }
 
@@ -79,6 +86,7 @@ const mutations = {
         state.user_id = null;
         state.username = "";
         state.is_login = false;
+        state.now_point = 0;
         router.push("/login");
     },
     setSuccessMessage(state, message) {
@@ -96,6 +104,9 @@ const mutations = {
     closeErrorMessage(state) {
         state.error_message.message = "";
         state.error_message.is_active = false;
+    },
+    setNowPoint(state, point) {
+        state.now_point = point;
     }
 }
 

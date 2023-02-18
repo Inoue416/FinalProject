@@ -4,7 +4,7 @@ export function isTextLength(text, lenght) {
 }
 
 export function textAreaValidator(text){
-    const regexp = /[<>`/~|*!=$&^+%()?.,;:’”＜＞'"[{\]}\s\\]+/gi;
+    const regexp = /[<>`/~|*!=$&^+%()?.,;:’”＜＞'"[{\]}\\]+/gi;
     if (text.match(regexp)) { return false; }
     return true;
 }

@@ -60,6 +60,9 @@
       chartData.value.labels.push(elem.created_at.replace("T", " "));
       chartData.value.datasets[0].data.push(elem.total);
     }
+    if (all_data.length != 0) {
+      store.dispatch("setNowPoint", all_data[all_data.length - 1].total);
+    }
     renderChart();
   });
 </script>

@@ -1,5 +1,11 @@
 <script setup>
     import SignupComponent from '@/components/SignupComponent.vue';
+    import { useStore } from 'vuex';
+    import router from '@/router';
+    const store = useStore();
+    if (store.state.is_login) {
+        router.push("home");
+    }
 </script>
 
 <template>

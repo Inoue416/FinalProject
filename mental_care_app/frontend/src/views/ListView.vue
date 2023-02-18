@@ -1,5 +1,11 @@
 <script setup>
     import ListComponent from '@/components/ListComponent.vue';
+    import { useStore } from 'vuex';
+    import router from '@/router';
+    const store = useStore();
+    if (!store.state.is_login) {
+        router.push("/login");
+    }
     const moduleName = "listmodule";
     const kindKey = "all";
 </script>    

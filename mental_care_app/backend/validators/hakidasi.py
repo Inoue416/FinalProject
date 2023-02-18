@@ -1,7 +1,7 @@
 import re
 
 def hakidasiValidator(value):
-    regexp = r"[<>`/~\|\*!=\$&\^%\(\)\+\?\.,;:’”＜＞'\"\[\{\]\}\s]"
+    regexp = r"[<>`/~\|\*!=\$&\^%\(\)\+\?\.,;:’”＜＞'\"\[\{\]\}]"
     return re.search(regexp, value)
 
 def isTextLength(text):

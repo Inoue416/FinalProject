@@ -59,7 +59,8 @@ const mutations = {
         state.max_pg = page;
         state.now_pg = 0;        
     },
-    setErrorMessage(message) {
+    setErrorMessage(state, message) {
+        console.log(state);
         store.state.error_message.message = message;
         store.state.error_message.is_active = true;
     },
