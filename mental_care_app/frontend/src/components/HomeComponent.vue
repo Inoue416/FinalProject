@@ -59,7 +59,9 @@
     });
     const getUserName = computed(()=>{
         return store.getters["getUserName"];
-    })
+    });
+    console.log("Home is login...");
+    console.log(store.getters["getIsLogin"]);
 </script>
 
 <template>

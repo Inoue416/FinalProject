@@ -2,6 +2,7 @@
 // IF: propsでkeyを入れて制御するかも
     import { useStore } from 'vuex';
     import { computed, defineProps, onBeforeMount, ref } from 'vue';
+    import router from '@/router';
     //const kindKey = "all"
     let all_data = [];
     const start = ref(0);
@@ -32,9 +33,6 @@
     console.log("created: ");
     
     console.log(all_data);
-    const getErrorMessage = computed(() => {
-        return store.getters[props.moduleName+"/getErrorMessage"];
-    });
     const getPageInfo = computed(() => {
         return store.getters[props.moduleName+"/getPageInfo"];
     });
@@ -52,6 +50,11 @@
         const ep = end.value * 10;
         return all_data.slice(sp, ep);
     });
+    console.log("watch List guard..");
+    console.log(store.getters["getIsLogin"]);
+    if(!store.getters["getIsLogin"]) {
+        router.push("/");
+    }
     
     onBeforeMount(async () => {
         await store.dispatch(setQuery, props.kindKey);
@@ -67,7 +70,6 @@
 </script>
 
 <template>
-    <div>{{ getErrorMessage }}</div>
     <table class="table">
         <thead>
             <tr>
