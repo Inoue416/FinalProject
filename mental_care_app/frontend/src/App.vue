@@ -81,9 +81,19 @@
       </div>
     </div>
   </nav>
-  <div class="container">
+  <div class="container background-img">
     <div v-if="getSuccessActive" class="alert alert-success d-flex justify-content-between" role="alert">{{ getSuccessMessage }}<button type="button" class="btn-close" aria-label="Close" @click="closeSuccessMessage"></button></div>
     <div v-if="getErrorActive" class="alert alert-danger d-flex justify-content-between" role="alert">{{ getErrorMessage }}<button type="button" class="btn-close" aria-label="Close" @click="closeErrorMessage"></button></div>
     <router-view/>
   </div>
 </template>
+
+<style>
+  body {
+    background-image: url(~@/assets/background_parper.jpg);
+    background-size: cover;
+  }
+  .container {
+    background-color: white;
+  }
+</style>
